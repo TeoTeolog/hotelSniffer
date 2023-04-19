@@ -1,32 +1,65 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { decrement, increment, incrementByAmount } from "../redux/user";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { logIn } from "../redux/user";
+import { TextField } from "../components/TextField";
+import { useValidation } from "../hooks/useValidation";
 
 export function AuthPage() {
-  const count = useSelector((state) => state.user.value);
+  console.log("rewrited");
   const dispatch = useDispatch();
+  const {
+    email,
+    setEmail,
+    emailError,
+    password,
+    setPassword,
+    passwordError,
+    validateAll,
+  } = useValidation();
+
+  const [form, setForm] = useState({
+    login: "",
+    password: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...form, [name]: value });
+  };
 
   return (
-    <div>
-      <div>
-        <span>{count}</span>
+    <div className="auth-background">
+      <div className="rounded-panel">
+        <TextField
+          className={"input-name"}
+          name={"login"}
+          error={emailError}
+          errorClassName={"error-classname"}
+          onChange={(event) => {
+            handleChange(event);
+          }}
+        />
+        {emailError && <span className="error">{emailError}</span>}
+        <TextField
+          className={"input-name"}
+          name={"password"}
+          type={"password"}
+          error={passwordError}
+          errorClassName={"error-classname"}
+          onChange={(event) => {
+            handleChange(event);
+          }}
+        />
+        {passwordError && <span className="error">{passwordError}</span>}
         <button
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
+          aria-label="Sign-in"
+          onClick={() => {
+            if (validateAll(form.login, form.password)) {
+              dispatch(logIn(form.login));
+            }
+          }}
         >
-          Increment
-        </button>
-        <button
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          Decrement
-        </button>
-        <button
-          aria-label="Increment by value value"
-          onClick={() => dispatch(incrementByAmount(22))}
-        >
-          increment by 22
+          Sign-in
         </button>
       </div>
     </div>

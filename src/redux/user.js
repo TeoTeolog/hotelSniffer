@@ -3,22 +3,22 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    value: 0,
+    isAuthenticated: false,
+    email: "",
   },
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    logIn: (state, action) => {
+      state.isAuthenticated = true;
+      state.email = action.payload;
     },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
+    logOut: (state) => {
+      state.isAuthenticated = false;
+      state.email = "";
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = userSlice.actions;
+export const { logIn, logOut } = userSlice.actions;
 
 export default userSlice.reducer;

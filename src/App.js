@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useRoutes } from "./routes.js";
-// import {AuthContext} from './context/AuthContext'
+import { useSelector } from "react-redux";
 // import './css/App.css'
 // import './css/style.css'
 
 function App() {
-  // const { login, logout, refreshingAccess, userId, token, refreshToken, ready} = useAuth()
-  // const isAuthenticated = !!token
-  // const routes = useRoutes(isAuthenticated)
-  const routes = useRoutes(false);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const routes = useRoutes(isAuthenticated);
   if (!true) {
     return <p>ТУТ должен быть loader </p>;
   }
