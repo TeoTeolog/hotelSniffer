@@ -4,7 +4,7 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "./user";
 
 const persistConfig = {
-  key: "root",
+  key: "user",
   storage,
 };
 

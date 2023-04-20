@@ -5,17 +5,8 @@ import { TextField } from "../components/TextField";
 import { useValidation } from "../hooks/useValidation";
 
 export function AuthPage() {
-  console.log("rewrited");
   const dispatch = useDispatch();
-  const {
-    email,
-    setEmail,
-    emailError,
-    password,
-    setPassword,
-    passwordError,
-    validateAll,
-  } = useValidation();
+  const { emailError, passwordError, validateAll } = useValidation();
 
   const [form, setForm] = useState({
     login: "",
