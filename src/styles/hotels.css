@@ -1,0 +1,14 @@
+.hotel-item-block{
+    display: flex;
+    background-color: antiquewhite;
+    flex-direction: column;
+}
+
+.search-result-field{
+    display: block;
+    width: 40%;
+}
+
+.hotel-item-block:hover{
+    background-color: rgb(129, 111, 86);
+}

@@ -1,17 +1,26 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import { SearchHotelsList, FavHotelsList } from "../components/Hotels";
+
 import { logOut } from "../redux/user";
+import { setSearchArr } from "../redux/searchResult";
+
 import { useHttp } from "../hooks/useHttp";
 import useQueryFormater from "../hooks/useQueryFormater";
 import useDateToJSON from "../hooks/useMyDate";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import "../styles/root.css";
 
 export function HotelsPage() {
   console.log("[HotelPage rerander]");
-  const user = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const favorites = useSelector((state) => state.favorites);
+  const searchRes = useSelector((state) => state.search);
 
   const { request, loading } = useHttp();
 
@@ -31,6 +40,7 @@ export function HotelsPage() {
       ...prevParams,
       [event.target.name]: event.target.value,
     }));
+    console.log("searchParams", searchParams);
   }
 
   const transformFormData = (formData) => {
@@ -44,23 +54,105 @@ export function HotelsPage() {
     };
   };
 
-  const handleSearchSubmit = useCallback(async (event) => {
-    event.preventDefault();
+  //   const completeData = (data) => {
+  //     const date = convertDateToJSON(selectedDate);
+  //     return data.map((item) => ({
+  //       id: item.hotelId,
+  //       hotelName: item.hotelName,
+  //       stars: item.stars,
+  //       priceFrom: item.priceFrom,
+  //       checkIn: date,
+  //       numberOfDays: searchParams.numberOfDays,
+  //       isFav: false,
+  //     }));
+  //   };
+
+  /* complete API data with UI data and check in Favorites Array*/
+  const completeData = (data) => {
+    const date = convertDateToJSON(selectedDate);
+    return data.map((element) => {
+      const matchingElement = favorites.favArray.find(
+        (item) => element.hotelId === item.id
+      );
+      return {
+        id: element.hotelId,
+        hotelName: element.hotelName,
+        stars: element.stars,
+        priceFrom: element.priceFrom,
+        checkIn: date,
+        numberOfDays: element.numberOfDays,
+        isFav: matchingElement,
+      };
+    });
+  };
+
+  //   const fetchHotelData = useCallback(async () => {
+  //     try {
+  //       console.log(searchParams);
+  //       const queryStringSearchParams = await toQueryStringData(
+  //         transformFormData(searchParams)
+  //       );
+  //       const fetched = await request(
+  //         `http://engine.hotellook.com/api/v2/cache.json${queryStringSearchParams}`,
+  //         "GET",
+  //         null
+  //       );
+  //       console.log("fetched", fetched);
+  //       dispatch(setSearchArr(completeData(fetched)));
+  //     } catch (e) {
+  //       console.log("ERROR GET data: ", e);
+  //     }
+  //   }, []);
+
+  //   const handleSearchSubmit = (event) => {
+  //     event.preventDefault();
+  //     fetchHotelData();
+  //   };
+
+  //   useEffect(() => {
+  //     fetchHotelData();
+  //   }, [fetchHotelData]);
+
+  const fetchHotelData = useCallback(async () => {
     try {
+      console.log(searchParams);
       const queryStringSearchParams = await toQueryStringData(
         transformFormData(searchParams)
       );
-      console.log(queryStringSearchParams);
       const fetched = await request(
         `http://engine.hotellook.com/api/v2/cache.json${queryStringSearchParams}`,
         "GET",
         null
       );
-      console.log("GET data: ", fetched);
+      console.log("fetched", fetched);
+      dispatch(setSearchArr(completeData(fetched)));
+    } catch (e) {
+      console.log("ERROR GET data: ", e);
+    }
+  }, []);
+
+  const handleSearchSubmit = useCallback(async (event) => {
+    event.preventDefault();
+    try {
+      console.log(searchParams);
+      const queryStringSearchParams = await toQueryStringData(
+        transformFormData(searchParams)
+      );
+      const fetched = await request(
+        `http://engine.hotellook.com/api/v2/cache.json${queryStringSearchParams}`,
+        "GET",
+        null
+      );
+      console.log("fetched", fetched);
+      dispatch(setSearchArr(completeData(fetched)));
     } catch (e) {
       console.log("ERROR GET data: ", e);
     }
   });
+
+  useEffect(() => {
+    fetchHotelData();
+  }, [fetchHotelData]);
 
   return (
     <div>
@@ -91,7 +183,10 @@ export function HotelsPage() {
           Search
         </button>
       </form>
-      {/* <div>{SearchResult}</div> */}
+      <div className="two-column-layout">
+        <SearchHotelsList loading={loading} data={searchRes.searchArray} />
+        <FavHotelsList loading={loading} data={favorites.favArray} />
+      </div>
     </div>
   );
 }
