@@ -16,15 +16,17 @@ export const searchSlice = createSlice({
       const index = state.searchArray.findIndex(
         (item) => action.payload.id === item.id
       );
-      const updatedObject = {
-        ...state.searchArray[index],
-        isFav: action.payload.isFav,
-      };
-      state.searchArray = [
-        ...state.searchArray.slice(0, index),
-        updatedObject,
-        ...state.searchArray.slice(index + 1),
-      ];
+      if (index >= 0) {
+        const updatedObject = {
+          ...state.searchArray[index],
+          isFav: action.payload.isFav,
+        };
+        state.searchArray = [
+          ...state.searchArray.slice(0, index),
+          updatedObject,
+          ...state.searchArray.slice(index + 1),
+        ];
+      }
     },
   },
 });

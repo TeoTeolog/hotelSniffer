@@ -19,10 +19,11 @@ export function AuthPage() {
   };
 
   return (
-    <div className="auth-background">
+    <div className="auth-background full-page">
       <div className="rounded-panel">
+        <span className="bold-text">Simple Hotel Check</span>
         <TextField
-          className={"input-name"}
+          lable={"Логин"}
           name={"login"}
           error={emailError}
           errorClassName={"error-classname"}
@@ -30,9 +31,8 @@ export function AuthPage() {
             handleChange(event);
           }}
         />
-        {emailError && <span className="error">{emailError}</span>}
         <TextField
-          className={"input-name"}
+          lable={"Пароль"}
           name={"password"}
           type={"password"}
           error={passwordError}
@@ -41,7 +41,6 @@ export function AuthPage() {
             handleChange(event);
           }}
         />
-        {passwordError && <span className="error">{passwordError}</span>}
         <button
           aria-label="Sign-in"
           onClick={() => {

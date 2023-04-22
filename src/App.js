@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useRoutes } from "./routes.js";
 import { useSelector } from "react-redux";
-// import './css/App.css'
-// import './css/style.css'
+
+import "./styles/root.css";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);

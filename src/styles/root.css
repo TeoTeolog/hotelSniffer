@@ -1,5 +1,111 @@
-.two-column-layout{
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.bold-text {
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 28px;
+    letter-spacing: 0em;
+    text-align: left;
+    text-align: center;
+}
+
+.two-column-layout {
     display: flex;
     flex-direction: row;
     width: 100%;
+}
+
+.auth-background {
+    background-size: 100% 100%;
+    /* background-size: cover; */
+    background-image: url('../img/IMG_20210312_140957_174 1.png');
+}
+
+.full-page {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.auth-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.rounded-panel {
+    box-sizing: border-box;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    border-radius: 16px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    padding: 32px;
+
+    height: 382px;
+    width: 409px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+}
+
+.rounded-panel>* {
+    margin-bottom: 10px;
+    width: 345px;
+}
+
+button {
+    background: linear-gradient(104.34deg, #41522E -15.34%, #BE8022 145.95%);
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 1px 1px 2px #000000;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
+        linear-gradient(104.34deg, #41522E -15.34%, #BE8022 145.95%);
+}
+
+button:active {
+    background: linear-gradient(104.34deg, #41522E -15.34%, #BE8022 145.95%);
+    box-shadow: inset 1px 1px 2px #000000;
+}
+
+button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.stretched-on {
+    width: 345px;
 }

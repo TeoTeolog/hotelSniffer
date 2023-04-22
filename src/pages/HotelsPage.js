@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { SearchHotelsList, FavHotelsList } from "../components/Hotels";
+import { SearchHotelsList } from "../components/Hotels";
+import { FavElement } from "../components/favoriteElement";
 
 import { logOut } from "../redux/user";
 import { setSearchArr } from "../redux/searchResult";
@@ -11,8 +12,6 @@ import { setSearchArr } from "../redux/searchResult";
 import { useHttp } from "../hooks/useHttp";
 import useQueryFormater from "../hooks/useQueryFormater";
 import useDateToJSON from "../hooks/useMyDate";
-
-import "../styles/root.css";
 
 export function HotelsPage() {
   console.log("[HotelPage rerander]");
@@ -53,19 +52,6 @@ export function HotelsPage() {
       limit: 100,
     };
   };
-
-  //   const completeData = (data) => {
-  //     const date = convertDateToJSON(selectedDate);
-  //     return data.map((item) => ({
-  //       id: item.hotelId,
-  //       hotelName: item.hotelName,
-  //       stars: item.stars,
-  //       priceFrom: item.priceFrom,
-  //       checkIn: date,
-  //       numberOfDays: searchParams.numberOfDays,
-  //       isFav: false,
-  //     }));
-  //   };
 
   /* complete API data with UI data and check in Favorites Array*/
   const completeData = (data) => {
@@ -185,7 +171,7 @@ export function HotelsPage() {
       </form>
       <div className="two-column-layout">
         <SearchHotelsList loading={loading} data={searchRes.searchArray} />
-        <FavHotelsList loading={loading} data={favorites.favArray} />
+        <FavElement loading={loading} data={favorites.favArray} />
       </div>
     </div>
   );
