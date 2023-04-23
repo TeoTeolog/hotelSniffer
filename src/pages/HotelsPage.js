@@ -91,7 +91,7 @@ export function HotelsPage() {
         transformFormData(searchParams)
       );
       const fetched = await request(
-        `http://engine.hotellook.com/api/v2/cache.json${queryStringSearchParams}`,
+        `https://engine.hotellook.com/api/v2/cache.json${queryStringSearchParams}`,
         "GET",
         null
       );
