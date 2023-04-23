@@ -1,11 +1,20 @@
 import React from "react";
 import "../styles/hotels.css";
+
 import logo from "../img/house.png";
+import likeActive from "../img/Vector.png";
+import like from "../img/Vector-1.png";
+
 import { useDispatch } from "react-redux";
 import { addItem, deleteItem } from "../redux/favorites";
 import { changeSearchItemFav } from "../redux/searchResult";
 
+import useDateToJSON from "../hooks/useMyDate";
+
+import { StarRating } from "../components/starsRate";
+
 function HotelItem({ data, icon }) {
+  const { formatDate, declinateDay } = useDateToJSON();
   const dispatch = useDispatch();
 
   function handleClick() {
@@ -17,14 +26,30 @@ function HotelItem({ data, icon }) {
   return (
     <div className="hotel-item-block">
       {!!icon && icon}
-      <div>Название: {data.hotelName}</div>
-      <div>Рейтинг: {data.stars}</div>
-      <div>Цена: {data.priceFrom}</div>
-      <div>Заезд: {!!data.checkIn && data.checkIn}</div>
-      <div>Длительность: {!!data.numberOfDays && data.numberOfDays}</div>
-      <div>IsFav: {(!!data.isFav && 1) || 0}</div>
-      <div>
-        <FavButton handleClick={handleClick} data={data} />
+      <div className="main-hotel-item-container">
+        <div className="hotel-item-layer">
+          <div>{data.hotelName}</div>
+          <div>
+            <FavButton handleClick={handleClick} data={data} />
+          </div>
+        </div>
+        <div className="hotel-item-layer">
+          <div className="date-block">
+            <div>{formatDate(data.checkIn)}</div>—
+            <div>
+              {data.numberOfDays} {declinateDay(data.numberOfDays, "дн")}
+            </div>
+          </div>
+        </div>
+        <div className="hotel-item-layer">
+          <div>
+            <StarRating rating={data.stars} />
+          </div>
+          <div className="price-block">
+            <span>Price:</span>
+            {data.priceFrom}$
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -33,7 +58,7 @@ function HotelItem({ data, icon }) {
 const HouseIco = () => {
   return (
     <div className="circle">
-      <img scr={logo} alt="" />
+      <img src={logo} alt="home"></img>
     </div>
   );
 };
@@ -47,7 +72,9 @@ const HouseIco = () => {
 const FavButton = (props) => {
   return (
     <button onClick={props.handleClick}>
-      {(props.data.isFav && "Удалить") || `Выбрать`}
+      {(props.data.isFav && <img src={likeActive} alt="Удалить"></img>) || (
+        <img src={like} alt="Выбрать"></img>
+      )}
     </button>
   );
 };

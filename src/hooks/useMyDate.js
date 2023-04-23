@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 export default function useDateToJSON() {
   //s
 
@@ -12,10 +14,33 @@ export default function useDateToJSON() {
   };
 
   const nextDayAmount = (dateObj, numbersOfDate = 1) => {
-    const resDate = new Date();
-    resDate.setDate(dateObj.getDate() + numbersOfDate);
+    const resDate = new Date(dateObj);
+    resDate.setDate(dateObj.getDate() + Number(numbersOfDate));
     return resDate;
   };
 
-  return { convertDateToJSON, nextDayAmount };
+  const formatDate = useMemo(() => {
+    return (dateString) => {
+      const date = new Date(dateString);
+      const options = { month: "long", day: "numeric", year: "numeric" };
+      return date.toLocaleDateString("ru-RU", options);
+    };
+  }, []);
+
+  const declinateDay = useMemo(() => {
+    return (number, word) => {
+      let mod10 = number % 10;
+      let mod100 = number % 100;
+
+      if (mod10 === 1 && mod100 !== 11) {
+        return word + "ь";
+      } else if ([2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100)) {
+        return word + "я";
+      } else {
+        return word + "ей";
+      }
+    };
+  }, []);
+
+  return { convertDateToJSON, nextDayAmount, formatDate, declinateDay };
 }

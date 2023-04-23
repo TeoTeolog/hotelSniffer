@@ -1,14 +1,93 @@
-.hotel-item-block{
+.hotel-item-block {
     display: flex;
-    background-color: antiquewhite;
-    flex-direction: column;
+    flex-direction: row;
+    width: 100%;
+    border-bottom: 1px solid #87878733;
+    height: 99px;
+    align-items: center;
 }
 
-.search-result-field{
+.hotel-item-block:hover {
+    background-color: rgba(128, 128, 128, 0.5);
+}
+
+.main-hotel-item-container {
+    width: 100%;
+    padding-right: 5px;
+}
+
+.hotel-item-layer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 2px;
+
+    font-family: "Roboto", sans-serif;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 22px;
+    letter-spacing: -0.40799999237060547px;
+    text-align: left;
+    margin-bottom: 2px;
+
+}
+
+.search-result-field {
     display: block;
-    width: 40%;
 }
 
-.hotel-item-block:hover{
-    background-color: rgb(129, 111, 86);
+.date-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 210px;
+
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.40799999237060547px;
+    text-align: left;
+    color: #878787;
+
+}
+
+
+
+.price-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 130px;
+
+    font-family: "Roboto", sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.40799999237060547px;
+    text-align: right;
+
+}
+
+.price-block span {
+    display: block;
+
+    font-family: "Roboto", sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 22px;
+    letter-spacing: -0.40799999237060547px;
+    text-align: left;
+    color: #878787;
+}
+
+.hotel-item-layer button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
 }

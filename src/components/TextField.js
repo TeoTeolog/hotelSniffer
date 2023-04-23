@@ -15,8 +15,6 @@ export function TextField(props) {
     props.onChange(event);
   };
 
-  console.log("lable:", props.lable);
-
   return (
     <div className="input-field-container">
       <label

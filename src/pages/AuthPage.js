@@ -20,8 +20,8 @@ export function AuthPage() {
 
   return (
     <div className="auth-background full-page">
-      <div className="rounded-panel">
-        <span className="bold-text">Simple Hotel Check</span>
+      <div className="auth-panel rounded-panel">
+        <span className="bold-text text-center">Simple Hotel Check</span>
         <TextField
           lable={"Логин"}
           name={"login"}
@@ -42,6 +42,7 @@ export function AuthPage() {
           }}
         />
         <button
+          className="button"
           aria-label="Sign-in"
           onClick={() => {
             if (validateAll(form.login, form.password)) {
