@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 import { SearchHotelsList } from "../components/Hotels";
 import { FavElement } from "../components/favoriteElement";
 import { TextField } from "../components/TextField";
+import { Slider } from "../components/Slider";
 
 import { logOut } from "../redux/user";
 import { setSearchArr } from "../redux/searchResult";
@@ -18,9 +17,11 @@ import logo from "../img/logOut.png";
 import img1 from "../img/Rectangle 23.png";
 import img2 from "../img/Rectangle 24.png";
 import img3 from "../img/Rectangle 28.png";
+import { useRenderCounter } from "../hooks/useRenderCounter";
+import { SearchForm } from "../components/SearchForm";
 
 export function HotelsPage() {
-  //   console.log("[HotelPage rerander]");
+  const render = useRenderCounter("HotelsPage");
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -37,8 +38,8 @@ export function HotelsPage() {
   } = useDateToJSON();
 
   const { toQueryStringData } = useQueryFormater();
-
   const [selectedDate, setSelectedDate] = useState(new Date());
+
   const [curDay, setCurDay] = useState(new Date());
   const [location, setLocation] = useState("Москва");
 
@@ -46,13 +47,6 @@ export function HotelsPage() {
     location: "Москва",
     numberOfDays: 1,
   });
-
-  function handleSearchParamChange(event) {
-    setSearchParams((prevParams) => ({
-      ...prevParams,
-      [event.target.name]: event.target.value,
-    }));
-  }
 
   const transformFormData = (formData) => {
     return {
@@ -105,13 +99,14 @@ export function HotelsPage() {
     }
   }, [searchParams, selectedDate]);
 
-  const handleSearchSubmit = useCallback(async () => {
-    fetchHotelData();
+  const handleSearchSubmit = useCallback(async (searchPar, day) => {
+    setSearchParams(searchPar);
+    setSelectedDate(day);
   });
 
   useEffect(() => {
     fetchHotelData();
-  }, []);
+  }, [searchParams]);
 
   return (
     <div className="hotels-background">
@@ -131,37 +126,11 @@ export function HotelsPage() {
       </div>
       <div className="content-container">
         <div className="left-column">
-          <div className="search-panel rounded-panel">
-            <TextField
-              type="text"
-              name="location"
-              lable="Локация"
-              value={searchParams.location}
-              onChange={handleSearchParamChange}
-            />
-            <label>Дата заселения</label>
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              minDate={new Date()}
-              maxDate={new Date("2025-12-31")}
-            />
-            <TextField
-              lable="Количество дней"
-              type="text"
-              name="numberOfDays"
-              value={searchParams.numberOfDays}
-              onChange={handleSearchParamChange}
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              onClick={handleSearchSubmit}
-              className="button"
-            >
-              Найти
-            </button>
-          </div>
+          <SearchForm
+            searchParams={searchParams}
+            loading={loading}
+            handleSearchSubmit={handleSearchSubmit}
+          />
           <div className="favorites-panel rounded-panel">
             <span className="bold-text">Избранное</span>
             <FavElement loading={loading} data={favorites.favArray} />
@@ -176,19 +145,19 @@ export function HotelsPage() {
             </div>
             <span>{formatDate(curDay)}</span>
           </div>
-          <div className="slider">
-            <div className="slider-wrapper">
-              <img src={img1} alt="image1"></img>
-              <img src={img2} alt="image2"></img>
-              <img src={img3} alt="image3"></img>
-              <img src={img1} alt="image1"></img>
-              <img src={img2} alt="image2"></img>
-              <img src={img3} alt="image3"></img>
-              <img src={img1} alt="image1"></img>
-              <img src={img2} alt="image2"></img>
-              <img src={img3} alt="image3"></img>
-            </div>
-          </div>
+          <Slider
+            images={[
+              { src: img1, alt: "image1", id: "1" },
+              { src: img2, alt: "image2", id: "2" },
+              { src: img3, alt: "image3", id: "3" },
+              { src: img1, alt: "image1", id: "4" },
+              { src: img2, alt: "image2", id: "5" },
+              { src: img3, alt: "image3", id: "6" },
+              { src: img1, alt: "image1", id: "7" },
+              { src: img2, alt: "image2", id: "8" },
+              { src: img3, alt: "image3", id: "9" },
+            ]}
+          />
           <div className="saerch-res-main">
             <div className="fav-info">
               Добавлено в Избранное:{" "}

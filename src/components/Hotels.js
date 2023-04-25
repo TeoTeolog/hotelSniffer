@@ -11,7 +11,7 @@ import { changeSearchItemFav } from "../redux/searchResult";
 
 import useDateToJSON from "../hooks/useMyDate";
 
-import { StarRating } from "../components/starsRate";
+import { StarRating } from "./StarsRate";
 
 function HotelItem({ data, icon }) {
   const { formatDate, declinateDay } = useDateToJSON();
@@ -43,7 +43,7 @@ function HotelItem({ data, icon }) {
         </div>
         <div className="hotel-item-layer">
           <div>
-            <StarRating rating={data.stars} />
+            <StarRating id={data.id} rating={data.stars} />
           </div>
           <div className="price-block">
             <span>Price:</span>
