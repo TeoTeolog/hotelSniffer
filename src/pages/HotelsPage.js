@@ -3,14 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { SearchHotelsList } from "../components/Hotels";
 import { FavElement } from "../components/favoriteElement";
-import { TextField } from "../components/TextField";
 import { Slider } from "../components/Slider";
 
 import { logOut } from "../redux/user";
-import { setSearchArr } from "../redux/searchResult";
 
 import { useHttp } from "../hooks/useHttp";
-import useQueryFormater from "../hooks/useQueryFormater";
 import useDateToJSON from "../hooks/useMyDate";
 
 import logo from "../img/logOut.png";
@@ -19,6 +16,7 @@ import img2 from "../img/Rectangle 24.png";
 import img3 from "../img/Rectangle 28.png";
 import { useRenderCounter } from "../hooks/useRenderCounter";
 import { SearchForm } from "../components/SearchForm";
+import { useSearch } from "../hooks/useSearch";
 
 export function HotelsPage() {
   const render = useRenderCounter("HotelsPage");
@@ -28,76 +26,18 @@ export function HotelsPage() {
   const favorites = useSelector((state) => state.favorites);
   const searchRes = useSelector((state) => state.search);
 
-  const { request, loading } = useHttp();
+  const { loading } = useHttp();
 
-  const {
-    convertDateToJSON,
-    nextDayAmount,
-    formatDate,
-    declinateDay,
-  } = useDateToJSON();
+  const { fetchHotelData } = useSearch();
 
-  const { toQueryStringData } = useQueryFormater();
+  const { formatDate, declinateDay } = useDateToJSON();
+
   const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const [curDay, setCurDay] = useState(new Date());
-  const [location, setLocation] = useState("Москва");
 
   const [searchParams, setSearchParams] = useState({
     location: "Москва",
     numberOfDays: 1,
   });
-
-  const transformFormData = (formData) => {
-    return {
-      location: formData.location,
-      checkIn: convertDateToJSON(selectedDate),
-      checkOut: convertDateToJSON(
-        nextDayAmount(selectedDate, formData.numberOfDays)
-      ),
-      lang: "ru",
-      limit: 100,
-    };
-  };
-
-  /* complete API data with UI data and check in Favorites Array*/
-  const completeData = (data, UIdata) => {
-    const date = convertDateToJSON(selectedDate);
-    return data.map((element) => {
-      const matchingElement = favorites.favArray.find(
-        (item) => element.hotelId === item.id
-      );
-      return {
-        id: element.hotelId,
-        hotelName: element.hotelName,
-        stars: element.stars,
-        priceFrom: element.priceFrom,
-        checkIn: date,
-        numberOfDays: UIdata.numberOfDays,
-        isFav: matchingElement,
-      };
-    });
-  };
-
-  const fetchHotelData = useCallback(async () => {
-    try {
-      const queryStringSearchParams = await toQueryStringData(
-        transformFormData(searchParams)
-      );
-      const fetched = await request(
-        `https://engine.hotellook.com/api/v2/cache.json${queryStringSearchParams}`,
-        "GET",
-        null
-      );
-      if (!!fetched && fetched.length > 0)
-        setLocation(fetched[0].location.name);
-      dispatch(setSearchArr(completeData(fetched, searchParams)));
-      if (!!fetched && fetched.length > 0)
-        setCurDay(convertDateToJSON(selectedDate));
-    } catch (e) {
-      console.log("ERROR GET data: ", e);
-    }
-  }, [searchParams, selectedDate]);
 
   const handleSearchSubmit = useCallback(async (searchPar, day) => {
     setSearchParams(searchPar);
@@ -105,7 +45,7 @@ export function HotelsPage() {
   });
 
   useEffect(() => {
-    fetchHotelData();
+    fetchHotelData({ ...searchParams, selectedDate: selectedDate });
   }, [searchParams]);
 
   return (
@@ -126,11 +66,13 @@ export function HotelsPage() {
       </div>
       <div className="content-container">
         <div className="left-column">
-          <SearchForm
-            searchParams={searchParams}
-            loading={loading}
-            handleSearchSubmit={handleSearchSubmit}
-          />
+          <div className="search-panel rounded-panel">
+            <SearchForm
+              searchParams={searchParams}
+              loading={loading}
+              handleSearchSubmit={handleSearchSubmit}
+            />
+          </div>
           <div className="favorites-panel rounded-panel">
             <span className="bold-text">Избранное</span>
             <FavElement loading={loading} data={favorites.favArray} />
@@ -141,9 +83,11 @@ export function HotelsPage() {
             <div className="location-info">
               <span>Отели</span>
               &gt;
-              <span>{!!location && location}</span>
+              <span>
+                {!!searchRes.searchLocation && searchRes.searchLocation}
+              </span>
             </div>
-            <span>{formatDate(curDay)}</span>
+            <span>{formatDate(searchRes.searchDate)}</span>
           </div>
           <Slider
             images={[
@@ -152,10 +96,6 @@ export function HotelsPage() {
               { src: img3, alt: "image3", id: "3" },
               { src: img1, alt: "image1", id: "4" },
               { src: img2, alt: "image2", id: "5" },
-              { src: img3, alt: "image3", id: "6" },
-              { src: img1, alt: "image1", id: "7" },
-              { src: img2, alt: "image2", id: "8" },
-              { src: img3, alt: "image3", id: "9" },
             ]}
           />
           <div className="saerch-res-main">

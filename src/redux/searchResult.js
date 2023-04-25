@@ -4,10 +4,16 @@ export const searchSlice = createSlice({
   name: "search",
   initialState: {
     searchArray: [],
+    searchLocation: "Москва",
+    searchDate: new Date(),
   },
   reducers: {
     setSearchArr: (state, action) => {
       state.searchArray = action.payload;
+      if (action.payload.length > 0) {
+        state.searchLocation = action.payload[0].location;
+        state.searchDate = action.payload[0].checkIn;
+      }
     },
     clearArray: (state) => {
       state.searchArray = [];

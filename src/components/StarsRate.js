@@ -2,7 +2,6 @@ import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { useRenderCounter } from "../hooks/useRenderCounter";
 
 export const StarRating = (props) => {
   const { rating, id } = props;

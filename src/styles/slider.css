@@ -43,7 +43,7 @@
 }
 
 .slider-wrapper:hover {
-    animation: slide 7s linear infinite;
+    animation: slide 4s linear infinite;
 }
 
 @keyframes slide {
@@ -52,7 +52,7 @@
     }
 
     50% {
-        left: -100%;
+        left: -35%;
     }
 
     100% {

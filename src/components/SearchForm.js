@@ -20,7 +20,7 @@ export const SearchForm = (props) => {
   }
 
   return (
-    <div className="search-panel rounded-panel">
+    <>
       <TextField
         type="text"
         name="location"
@@ -52,6 +52,6 @@ export const SearchForm = (props) => {
       >
         Найти
       </button>
-    </div>
+    </>
   );
 };

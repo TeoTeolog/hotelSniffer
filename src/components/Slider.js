@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "../styles/slider.css";
 
 export function Slider(props) {
   const { images } = props;
 
-  const handleTextChange = (event) => {
-    props.onChange(event);
-  };
+  const [currentSelect, setCurrentSelect] = useState(
+    !!images[0].id ? images[0].id : ""
+  );
 
   return (
     <div className="slider">
@@ -16,6 +16,7 @@ export function Slider(props) {
           {images.map((item, index) => (
             <li key={(!!item.id && item.id) || index}>
               <img
+                className={item.id === currentSelect ? "selected" : ""}
                 src={item.src}
                 alt={(!!item.alt && item.src.toString()) || "image"}
               />
